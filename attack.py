@@ -1,6 +1,6 @@
-import logging
-import time
 import sys
+import time
+import logging
 import cypari2
 
 from math import gcd
@@ -128,7 +128,7 @@ else:
     xi1 = float(sys.argv[3])
     xi2 = float(sys.argv[4])
     s = int(sys.argv[5])
-    if len(sys.argv) == 7:
+    if len(sys.argv) >= 7:
         test_times = int(sys.argv[6])
     else:
         test_times = 5
@@ -147,10 +147,10 @@ for i in range(test_times):
     if result:
         total_time += test_time
         results.append(result)
-    logging.info(f"Test {i+1} costs {test_time:.3f} seconds")
 
 if len(results) == 0:
-    logging.info(f"The success rate for n={n}, w={w}, xi1={xi1}, xi2={xi2} using s={s} and {strategy} strategy is 0%")
+    logging.info(f"The success rate for n={n}, w={w}, xi1={xi1}, xi2={xi2} using s={s} and {strategy} strategy is 0%...")
 else:
+    logging.info(f"Success rate for n={n}, w={w}, xi1={xi1}, xi2={xi2} using s={s} and {strategy} strategy is {sum(results)/test_times*100}%...")
     avg_time = total_time / len(results)
-    logging.info(f"The success rate for n={n}, w={w}, xi1={xi1}, xi2={xi2} using s={s} and {strategy} strategy is {sum(results)/test_times*100}% and average time is {avg_time:.3f} seconds")
+    logging.info(f"Average time is {avg_time:.3f} seconds...")

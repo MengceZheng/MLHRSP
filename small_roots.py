@@ -1,4 +1,5 @@
 import logging
+import time
 
 from sage.all import QQ
 from sage.all import Sequence
@@ -66,8 +67,13 @@ def reduce_lattice(L, delta=0.8):
     :return: the reduced basis
     """
     # logging.debug(f"Reducing a {L.nrows()} x {L.ncols()} lattice...")
-    logging.info(f"Reducing a {L.nrows()} x {L.ncols()} lattice...")
-    return L.LLL(delta)
+    # logging.info(f"Reducing a {L.nrows()} x {L.ncols()} lattice...")
+    start_time = time.perf_counter()
+    L_reduced = L.LLL(delta)
+    end_time = time.perf_counter()
+    reduced_time = end_time - start_time
+    logging.info(f"Reducing a {L.nrows()} x {L.ncols()} lattice within {reduced_time:.3f} seconds...")
+    return L_reduced
 
 
 def reconstruct_polynomials(B, f, modulus, monomials, bounds, preprocess_polynomial=lambda x: x, divide_gcd=True):
@@ -341,7 +347,12 @@ def modular_multivariate(f, N, m, t, X, roots_method="groebner"):
     L, monomials = create_lattice(pr, shifts, X)
     L = reduce_lattice(L)
     polynomials = reconstruct_polynomials(L, f, N, monomials, X)
-    for roots in find_roots(pr, polynomials, method=roots_method):
+    start_time = time.perf_counter()
+    solutions = find_roots(pr, polynomials, method=roots_method)
+    end_time = time.perf_counter()
+    solution_time = end_time - start_time
+    logging.info(f"Finding roots within {solution_time:.3f} seconds...")
+    for roots in solutions:
         yield tuple(roots[xi] for xi in x)
 
 
@@ -376,5 +387,10 @@ def modular_bivariate_homogeneous(f, N, m, t, X, Y, roots_method="groebner"):
     L, monomials = create_lattice(pr, shifts, [X, Y])
     L = reduce_lattice(L)
     polynomials = reconstruct_polynomials(L, f, N ** t, monomials, [X, Y])
-    for roots in find_roots(pr, polynomials, method=roots_method):
+    start_time = time.perf_counter()
+    solutions = find_roots(pr, polynomials, method=roots_method)
+    end_time = time.perf_counter()
+    solution_time = end_time - start_time
+    logging.info(f"Finding roots within {solution_time:.3f} seconds...")
+    for roots in solutions:
         yield roots[x], roots[y]
