@@ -10,6 +10,7 @@ from sage.all import inverse_mod
 
 import solving_strategy
 
+logging.basicConfig(filename='attack.log', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 sys.set_int_max_str_digits(0)
 pari = cypari2.Pari()
 pari.allocatemem(10000000000)   
@@ -100,17 +101,6 @@ def attack_MLHRSP_instance(p, h, xi1, xi2, s=5, strategy="basic"):
         logging.info(f"Failed!")
         return 0, test_time
 
-# Some logging so we can see what's happening.
-# logging.basicConfig(level=logging.DEBUG)
-logging.basicConfig(level=logging.INFO)
-
-# n = 521
-# w = 10
-# xi1 = 0.5
-# xi2 = 0.5
-# test_times = 5
-# s = 5
-# strategy = basic
 
 assert len(sys.argv) == 1 or 6 <= len(sys.argv) <= 8, f"Wrong arguments! Please check and input suitable parameters."
 if len(sys.argv) == 1:
@@ -150,7 +140,9 @@ for i in range(test_times):
 
 if len(results) == 0:
     logging.info(f"The success rate for n={n}, w={w}, xi1={xi1}, xi2={xi2} using s={s} and {strategy} strategy is 0%...")
+    print(f"The success rate for n={n}, w={w}, xi1={xi1}, xi2={xi2} using s={s} and {strategy} strategy is 0%...")
 else:
     logging.info(f"Success rate for n={n}, w={w}, xi1={xi1}, xi2={xi2} using s={s} and {strategy} strategy is {sum(results)/test_times*100}%...")
+    print(f"Success rate for n={n}, w={w}, xi1={xi1}, xi2={xi2} using s={s} and {strategy} strategy is {sum(results)/test_times*100}%...")
     avg_time = total_time / len(results)
-    logging.info(f"Average time is {avg_time:.3f} seconds...")
+    print(f"Average time is {avg_time:.3f} seconds...")
