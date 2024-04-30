@@ -2,18 +2,17 @@
 
 ## Introduction
 
-This is a Python implementation of lattice-based attacks proposed in **Improved Lattice-Based Attack on Mersenne Low Hamming Ratio Search Problem**[^MLHRSP]. Some underlying functions are based on [Joachim Vandersmissen's crypto-attacks](https://github.com/jvdsn/crypto-attacks).
+This is a Python implementation of lattice-based attacks proposed in **Improved Lattice-Based Attack on Mersenne Low Hamming Ratio Search Problem**[^MLHRSP]. Some underlying functions are based on [Joachim Vandersmissen&#39;s crypto-attacks](https://github.com/jvdsn/crypto-attacks).
 
 ## Requirements
 
-* [SageMath](https://www.sagemath.org/) with Python 3.9
-* [PyCryptodome](https://pycryptodome.readthedocs.io/)
+- [**SageMath**](https://www.sagemath.org/) 9.5 with Python 3.10
 
 You can check your SageMath Python version using the following command:
 
 ```commandline
 $ sage -python --version
-Python 3.9.0
+Python 3.10.12
 ```
 
 Note: If your SageMath Python version is older than 3.9.0, some features in given scripts might not work.
