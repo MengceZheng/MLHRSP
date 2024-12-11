@@ -77,4 +77,4 @@ Average time is 0.119 seconds...
 
 All the details of the numerical attack experiments are recorded in the `attack.log` file.
 
-[^MLHRSP]: Zheng M., Yan W., "Improved Lattice-Based Attack on Mersenne Low Hamming Ratio Search Problem" | [PDF](https://mengcezheng.github.io/docs/BD00.pdf)
+[^MLHRSP]: Zheng M., Yan W., "Improved Lattice-Based Attack on Mersenne Low Hamming Ratio Search Problem" | [PDF](https://mengcezheng.github.io/docs/ZY24.pdf)
