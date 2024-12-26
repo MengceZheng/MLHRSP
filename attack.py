@@ -3,10 +3,8 @@ import time
 import logging
 import cypari2
 
-from math import gcd
 from random import randrange
-from sage.all import Integer
-from sage.all import inverse_mod
+from sage.all import *
 
 import solving_strategy
 
@@ -83,13 +81,13 @@ def attack_MLHRSP_instance(p, h, xi1, xi2, s=5, strategy="basic"):
     if strategy == "basic":
         logging.info("Using basic solving strategy to find roots...")
         start_time = time.perf_counter()
-        fs, gs = solving_strategy.basic_attack(p, h, xi1, xi2, s=s)
+        fs, gs = solving_strategy.basic_attack(p, h, xi1, xi2, s)
         end_time = time.perf_counter()
         test_time = end_time - start_time
     elif strategy == "improved":
         logging.info("Using improved solving strategy to find roots...")
         start_time = time.perf_counter()
-        fs, gs = solving_strategy.improved_attack(p, h, xi1, xi2, s=s)
+        fs, gs = solving_strategy.improved_attack(p, h, xi1, xi2, s)
         end_time = time.perf_counter()
         test_time = end_time - start_time
     if fs is not None and gs is not None and fs == f and gs == g:
@@ -133,7 +131,7 @@ results = []
 
 for i in range(test_times):
     p, f, g, h = generate_MLHRSP_instance(n, w, xi1, xi2)
-    result, test_time = attack_MLHRSP_instance(p, h, xi1, xi2, s=s, strategy=strategy)
+    result, test_time = attack_MLHRSP_instance(p, h, xi1, xi2, s, strategy=strategy)
     if result:
         total_time += test_time
         results.append(result)

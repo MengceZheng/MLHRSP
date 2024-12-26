@@ -1,16 +1,11 @@
 import logging
 import time
 
-from sage.all import QQ
-from sage.all import Sequence
-from sage.all import ZZ
-from sage.all import gcd
-from sage.all import matrix
-from sage.all import solve
-from sage.all import var
+from sage.all import *
 
 DEBUG_ROOTS = None
 Bound_Check = False
+USE_FLATTER = True
 
 
 def log_lattice(L):
@@ -69,7 +64,14 @@ def reduce_lattice(L, delta=0.8):
     # logging.debug(f"Reducing a {L.nrows()} x {L.ncols()} lattice...")
     # logging.info(f"Reducing a {L.nrows()} x {L.ncols()} lattice...")
     start_time = time.perf_counter()
-    L_reduced = L.LLL(delta)
+    if USE_FLATTER:
+        from subprocess import check_output
+        from re import findall
+        LL = "[[" + "]\n[".join(" ".join(map(str, row)) for row in L) + "]]"
+        ret = check_output(["flatter"], input = LL.encode())
+        L_reduced = matrix(L.nrows(), L.ncols(), map(int, findall(rb"-?\d+", ret)))
+    else:
+        L_reduced = L.LLL(delta)
     end_time = time.perf_counter()
     reduced_time = end_time - start_time
     logging.info(f"Reducing a {L.nrows()} x {L.ncols()} lattice within {reduced_time:.3f} seconds...")
