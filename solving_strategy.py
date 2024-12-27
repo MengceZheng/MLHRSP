@@ -38,7 +38,8 @@ def improved_attack(p, h, xi1, xi2, s=5):
     :param s: the s value to use for the small roots method (default: 5)
     :return: a tuple containing the roots
     """
-    x, y = Zmod(p)["x", "y"].gens()
+    pr = ZZ["x", "y"]
+    x, y = pr.gens()
     f = x - h * y
     X = int(RR(p) ** xi1)
     Y = int(RR(p) ** xi2)

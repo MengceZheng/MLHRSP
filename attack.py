@@ -131,7 +131,7 @@ results = []
 
 for i in range(test_times):
     p, f, g, h = generate_MLHRSP_instance(n, w, xi1, xi2)
-    result, test_time = attack_MLHRSP_instance(p, h, xi1, xi2, s, strategy=strategy)
+    result, test_time = attack_MLHRSP_instance(p, h, xi1, xi2, s, strategy)
     if result:
         total_time += test_time
         results.append(result)

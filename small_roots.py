@@ -8,21 +8,6 @@ Bound_Check = False
 USE_FLATTER = True
 
 
-def log_lattice(L):
-    """
-    Logs a lattice.
-    :param L: the lattice
-    """
-    for row in range(L.nrows()):
-        r = ""
-        for col in range(L.ncols()):
-            if L[row, col] == 0:
-                r += "_ "
-            else:
-                r += "X "
-        logging.debug(r)
-
-
 def create_lattice(pr, shifts, bounds, order="invlex", sort_shifts_reverse=False, sort_monomials_reverse=False):
     """
     Creates a lattice from a list of shift polynomials.
@@ -204,25 +189,6 @@ def find_roots_groebner(pr, polynomials):
                 yield roots
                 return
 
-            # logging.debug(f"System is underdetermined, trying to find constant root...")
-            # G = Sequence(s, pr.change_ring(ZZ, order="lex")).groebner_basis()
-            # vars = tuple(map(lambda x: var(x), gens))
-            # for solution_dict in solve([polynomial(*vars) for polynomial in G], vars, solution_dict=True):
-            #     logging.debug(solution_dict)
-            #     found = False
-            #     roots = {}
-            #     for i, v in enumerate(vars):
-            #         s = solution_dict[v]
-            #         if s.is_constant():
-            #             if not s.is_zero():
-            #                 found = True
-            #             roots[gens[i]] = int(s) if s.is_integer() else int(s) + 1
-            #         else:
-            #             roots[gens[i]] = 0
-            #     if found:
-            #         yield roots
-            #         return
-
             return
         else:
             # Remove last element (the biggest vector) and try again.
@@ -372,7 +338,7 @@ def modular_bivariate_homogeneous(f, N, m, t, X, Y, roots_method="groebner"):
     :return: a generator generating small roots (tuples of x and y roots) of the polynomial
     """
     f = f.change_ring(ZZ)
-    pr = f.parent()
+    pr = PolynomialRing(ZZ, ['x', 'y'])
     x, y = pr.gens()
 
     al = int(f.coefficient(x))
@@ -390,7 +356,18 @@ def modular_bivariate_homogeneous(f, N, m, t, X, Y, roots_method="groebner"):
     L = reduce_lattice(L)
     polynomials = reconstruct_polynomials(L, f, N ** t, monomials, [X, Y])
     start_time = time.perf_counter()
-    solutions = find_roots(pr, polynomials, method=roots_method)
+    # solutions = find_roots(pr, polynomials, method=roots_method)
+    t = var('t')
+    g = polynomials[0].subs(x = t*y).subs(y = 1).simplify()
+    logging.debug(f"{g = }")
+    root_t = solve(g == 0, t, domain = QQ)
+    solutions = []
+    for xy in root_t:  
+        t0 = xy.rhs()
+        x0 = t0.numerator()
+        y0 = t0.denominator()
+        root = {x: x0, y: y0}
+        solutions.append(root)
     end_time = time.perf_counter()
     solution_time = end_time - start_time
     logging.info(f"Finding roots within {solution_time:.3f} seconds...")
